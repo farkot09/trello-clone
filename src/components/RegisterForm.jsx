@@ -1,28 +1,27 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid2";
-import { TextField, Button, Box, Typography } from "@mui/material";
-import { login } from "../services/auth";
-import { useNavigate } from "react-router-dom";
-import useAuthStore from "../store/authStore";
+import { TextField, Button, Box, Typography, Alert } from "@mui/material";
+import { register } from "../services/auth";
 
-function LoginForm({ handleLoginClick }) {
+function RegisterForm({ handleRegisterClick }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { setToken } = useAuthStore();
-  const navigate = useNavigate();
+  const [severityAlert, setAeverityAlert] = useState("");
+  const [messageAlert, setMessageAlert] = useState("");
+  const [password, setPassword] = useState("");;
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await login({ email, password });
-      const {
-        data: { token },
-      } = res;
-      setToken(token);
-      navigate("/");
+      const res = await register({ name, email, password });
+      console.log(res);
+      setAeverityAlert("success");
+      setMessageAlert("Registration successful. You can now login.");      
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data.message);
+      setAeverityAlert("error");
+      setMessageAlert(error.response.data.message);
     }
   };
 
@@ -51,8 +50,17 @@ function LoginForm({ handleLoginClick }) {
             color="#6161ff"
             sx={{ marginBottom: "20px" }}
           >
-            Login
+            Register
           </Typography>
+          <TextField
+            fullWidth
+            label="Name"
+            variant="outlined"
+            required
+            color="error"
+            onChange={(e) => setName(e.target.value)}
+            sx={{ marginBottom: "20px" }}
+          />
           <TextField
             fullWidth
             label="Email"
@@ -81,10 +89,11 @@ function LoginForm({ handleLoginClick }) {
               color: "white",
             }}
           >
-            LOGIN
+            Register
           </Button>
           <Box sx={{ marginTop: "20px" }}>
-            <Button onClick={handleLoginClick}>Register</Button>
+            <Button onClick={handleRegisterClick}>Login</Button>
+            <Alert severity={severityAlert}>{messageAlert}</Alert>
           </Box>
         </Box>
       </Grid>
@@ -104,4 +113,4 @@ function LoginForm({ handleLoginClick }) {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;
