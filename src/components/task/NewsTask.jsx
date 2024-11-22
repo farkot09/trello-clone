@@ -1,11 +1,24 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Avatar, Box, IconButton } from "@mui/material";
 import globalStyles from "../../styles";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ModalComments from "../modalComments";
 
-const NewsTask = ({ title, comments, date, header }) => {
+// eslint-disable-next-line react/prop-types
+const NewsTask = ({ task_id, title, comments, date, header, description }) => {
   const [formatedDate, setformatedDate] = useState("");
+  const [open, openchange] = useState(false);
+
+  const functionopenpopup = () => {
+    openchange(true);
+  };
+
+  const closepopup = () => {
+    openchange(false);
+  };
+
   useEffect(() => {
     const fecha = new Date(date);
     const opciones = { day: "numeric", month: "long" };
@@ -15,15 +28,15 @@ const NewsTask = ({ title, comments, date, header }) => {
 
   return (
     <Box sx={globalStyles.paperNewTask}>
-      {/* Encabezado decorativo */}
       <Box sx={header}></Box>
 
-      {/* Título */}
-      <Typography variant="h6" color="black" sx={{ marginBottom: "8px" }}>
+      <Typography variant="h6" color="#6161ff" sx={{ marginBottom: "8px" }}>
         {title}
       </Typography>
+      <Typography variant="subtitle1" color="textSecondary" sx={{ marginBottom: "8px" }}>
+        {description}
+      </Typography>
 
-      {/* Información del pie de tarjeta */}
       <Box
         sx={{
           display: "flex",
@@ -43,14 +56,20 @@ const NewsTask = ({ title, comments, date, header }) => {
           </Typography>
         </Box>
 
-        {/* Icono de comentarios */}
-        <IconButton size="small">
+        <IconButton size="small" onClick={functionopenpopup}>
           <ChatBubbleOutlineIcon fontSize="small" />
           <Typography variant="body2" sx={{ marginLeft: "4px" }}>
             {comments?.length}
           </Typography>
         </IconButton>
       </Box>
+      <ModalComments
+          functionopenpopup={functionopenpopup}
+          closepopup={closepopup}
+          open={open}
+          task_id={task_id}
+          task_title={title}  // Add task_id as a prop to the ModalComments component for identifying the task.  // Add task_id as a prop to the ModalComments component for identifying the task
+        />
     </Box>
   );
 };

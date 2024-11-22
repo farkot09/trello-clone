@@ -7,7 +7,11 @@ const globalStyles = {
       backgroundColor: "#fff",
       maxWidth: "300px", 
       margin: "auto",
-      marginBottom:"10px" 
+      marginBottom:"10px",
+      transition: 'transform 0.3s ease-in-out', // Suaviza el escalado
+      '&:hover': {
+        transform: 'scale(1.1)', // Escala el componente al 110%
+      },
     },
     titleNewTask: {
       whiteSpace: "normal",    
