@@ -14,8 +14,7 @@ function RegisterForm({ handleRegisterClick }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await register({ name, email, password });
-      console.log(res);
+      const res = await register({ name, email, password });   
       setAeverityAlert("success");
       setMessageAlert("Registration successful. You can now login.");      
     } catch (error) {

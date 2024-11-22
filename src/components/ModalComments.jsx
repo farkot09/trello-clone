@@ -23,14 +23,14 @@ const ModalComments = ({ closepopup, open, task_id, task_title }) => {
   const [getToken, setGetToken] = useState("");
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-
+  const [detectChanges, setDetectChanges] = useState(false);
   const { isAuthenticated } = useAuthStore();
   const { id, token } = isAuthenticated();
 
   useEffect(() => {
     setGetToken(token);
     getComments(task_id);
-  }, [token, comments]);
+  }, [token, detectChanges]);
 
   const getComments = async () => {
     try {
@@ -43,14 +43,14 @@ const ModalComments = ({ closepopup, open, task_id, task_title }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const addComment = { content:newComment, id_user: id, id_task: task_id  };
+    const addComment = { content: newComment, id_user: id, id_task: task_id };
     try {
       const res = await createComment(addComment, getToken);
-      console.log(res.data);
-      setNewComment("")
-
+      setNewComment("");
+      setDetectChanges(!detectChanges);
     } catch (error) {
-        console.error(error.response.data.message);
+      console.error(error.response.data.message);
+      setDetectChanges(!detectChanges);
     }
   };
 
@@ -59,14 +59,14 @@ const ModalComments = ({ closepopup, open, task_id, task_title }) => {
       <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
         <Grid container spacing={2}>
           {/* Información del usuario */}
-          <Grid size={{xs:12, sm:3}}>
+          <Grid size={{ xs: 12, sm: 3 }}>
             <Typography variant="subtitle2">{comment.id_user.name}</Typography>
             <Typography variant="caption" color="#fc275d">
               {comment.id_user.email}
             </Typography>
           </Grid>
           {/* Contenido del comentario */}
-          <Grid size={{xs:12, sm:9}} >
+          <Grid size={{ xs: 12, sm: 9 }}>
             <Typography variant="body1">{comment.content}</Typography>
             <Typography variant="caption" color="#01c875">
               {new Date(comment.createdAt).toLocaleString()}
@@ -90,16 +90,24 @@ const ModalComments = ({ closepopup, open, task_id, task_title }) => {
           <IconButton onClick={closepopup} style={{ float: "right" }}>
             <CloseIcon color="primary"></CloseIcon>
           </IconButton>
-          <Typography variant="h6" color="info">{task_title}</Typography> 
-          <Typography variant="subtitle2" color="textSecondary">Comments</Typography> 
+          <Typography variant="h6" color="info">
+            {task_title}
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+            Comments
+          </Typography>
         </DialogTitle>
         <DialogContent>
           {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
           <Stack spacing={1} margin={1}>
             {comments?.map((comment) => (
-                <motion.div key={comment.id} initial={{ scale: 0 }} animate={{ scale: 1 }}>
+              <motion.div
+                key={comment.id}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+              >
                 <ComentarioItem comment={comment} />
-                </motion.div>
+              </motion.div>
             ))}
             <TextField
               variant="outlined"

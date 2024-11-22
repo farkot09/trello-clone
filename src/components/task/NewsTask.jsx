@@ -7,11 +7,16 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ModalComments from "../modalComments";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import { getCommentsByTask } from "../../services/comments";
+import useAuthStore from "../../store/authStore";
 
 // eslint-disable-next-line react/prop-types
-const NewsTask = ({ task_id, title, comments, date, header, description }) => {
+const NewsTask = ({ task_id, title, date, header, description }) => {
   const [formatedDate, setformatedDate] = useState("");
   const [open, openchange] = useState(false);
+  const [commentsCount, setCommentsCount] = useState(0);
+  const { isAuthenticated } = useAuthStore();
+  const { token } = isAuthenticated();
 
   const functionopenpopup = () => {
     openchange(true);
@@ -21,11 +26,21 @@ const NewsTask = ({ task_id, title, comments, date, header, description }) => {
     openchange(false);
   };
 
+  const getComments = async (task_id) => {
+    try {
+      const res = await getCommentsByTask(task_id, token);      
+      setCommentsCount(res.data.length);     
+    } catch (error) {
+      console.error(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
     const fecha = new Date(date);
     const opciones = { day: "numeric", month: "long" };
     const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
     setformatedDate(fechaFormateada);
+    getComments(task_id)    
   }, [date]);
 
   return (
@@ -69,7 +84,7 @@ const NewsTask = ({ task_id, title, comments, date, header, description }) => {
           <IconButton sx={{color:'#6161ff'}} size="small" onClick={functionopenpopup}>
             <ChatBubbleOutlineIcon fontSize="small" />
             <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-              {comments?.length}
+              {commentsCount}
             </Typography>
           </IconButton>
         </Box>

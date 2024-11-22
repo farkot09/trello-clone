@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Board from "./components/Board";
 import LoginPage from "./pages/LoginPage";
+import BoardPage from "./pages/Boardpage";
+import TaskPage from "./pages/TaskPage";
 import Grid from "@mui/material/Grid2";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import useAuthStore from "./store/authStore";
@@ -10,9 +12,6 @@ import useAuthStore from "./store/authStore";
 const App = () => {
   const { isAuthenticated } = useAuthStore();
   const { isAuth } = isAuthenticated();
-  useEffect(() => {
-    console.log(isAuthenticated());
-  }, [isAuthenticated]);
 
   return (
     <Router>
@@ -22,8 +21,9 @@ const App = () => {
         <Grid size={12} sx={{ paddingTop: "14px" }}>
           {isAuth ? (
             <Routes>
-              <Route path="/" element={<Board />} />
+              <Route path="/board" element={<BoardPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/tasks/:boardId" element={<TaskPage />} />
             </Routes>
           ) : (
             ""

@@ -11,3 +11,8 @@ export const createTask = async (dataTask, token) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;    
     return axios.post(`${VITE_API_URL}/tasks`, dataTask)
 }
+
+export const getTaskByBoardId = async (id, token) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    return axios.get(`${VITE_API_URL}/tasks/board/${id}`)
+}

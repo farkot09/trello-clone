@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { deepOrange } from "@mui/material/colors";
 import useAuthStore from "../store/authStore";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const { isAuthenticated } = useAuthStore();
@@ -41,6 +42,7 @@ const Navbar = () => {
               <Button
                 key={index}
                 variant={item === "Board" ? "outlined" : "text"}
+                component={Link} to={`/${item.toLowerCase()}`}
                 sx={{
                   textTransform: "none",
                   fontWeight: item === "Board" ? "bold" : "normal",

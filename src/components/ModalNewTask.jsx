@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { createTask } from "../services/tasks";
 import useAuthStore from "../store/authStore";
 import useTaskStore from "../store/taskStore";
+import { useParams } from "react-router-dom";
 
 const ModalNewTask = ({ functionopenpopup, closepopup, open }) => {
     const [title, setTitle] = useState("")
@@ -25,14 +26,15 @@ const ModalNewTask = ({ functionopenpopup, closepopup, open }) => {
     const { isAuthenticated } = useAuthStore();
     const { id, token } = isAuthenticated();
     const { addTask } = useTaskStore();
+    const { boardId } = useParams();
 
     useEffect(() => {
-        setGetToken(token)
+        setGetToken(token)        
     }, [token])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const newTask = { title, description, id_user: id, status: "Pending"};
+        const newTask = { title, description, id_user: id, status: "Pending", id_board:+boardId};
         try {
           const res = await createTask(newTask, getToken);          
           if (res.status === 201) {
@@ -44,8 +46,7 @@ const ModalNewTask = ({ functionopenpopup, closepopup, open }) => {
             addTask(newTask);
           }
 
-        } catch (error) {
-            console.error(error.response.data.message);
+        } catch (error) {            
             setAeverityAlert("error");
             setMessageAlert(error.response.data.message);
             setTitle("");
