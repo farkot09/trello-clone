@@ -5,6 +5,8 @@ import { Avatar, Box, IconButton } from "@mui/material";
 import globalStyles from "../../styles";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ModalComments from "../modalComments";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 // eslint-disable-next-line react/prop-types
 const NewsTask = ({ task_id, title, comments, date, header, description }) => {
@@ -49,19 +51,28 @@ const NewsTask = ({ task_id, title, comments, date, header, description }) => {
           <Avatar
             src="https://via.placeholder.com/40"
             alt="User Avatar"
-            sx={{ width: 30, height: 30, marginRight: "8px" }}
+            sx={{ width: 30, height: 30, marginRight: "1px" }}
           />
           <Typography variant="body2" color="textSecondary">
             {formatedDate}
           </Typography>
         </Box>
 
-        <IconButton size="small" onClick={functionopenpopup}>
-          <ChatBubbleOutlineIcon fontSize="small" />
-          <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-            {comments?.length}
-          </Typography>
-        </IconButton>
+        <Box>
+          <IconButton sx={{color:'#01c875'}} size="small" onClick={functionopenpopup}>
+            <ArrowForwardIcon fontSize="small" />
+          </IconButton>
+          <IconButton sx={{color:'#fc275d'}} size="small" onClick={functionopenpopup}>
+            <PersonAddAltIcon fontSize="small" />
+          </IconButton>
+
+          <IconButton sx={{color:'#6161ff'}} size="small" onClick={functionopenpopup}>
+            <ChatBubbleOutlineIcon fontSize="small" />
+            <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+              {comments?.length}
+            </Typography>
+          </IconButton>
+        </Box>
       </Box>
       <ModalComments
           functionopenpopup={functionopenpopup}
