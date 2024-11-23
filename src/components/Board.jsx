@@ -8,10 +8,8 @@ import ButtonAddNew from "../components/task/ButtonAddNew";
 import globalStyles from "../styles";
 import { Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import useAuthStore from "../store/authStore";
 
 const Board = ({ tasks }) => {
-
   return (
     <Grid
       container
@@ -47,6 +45,7 @@ const Board = ({ tasks }) => {
                 date={task.createdAt}
                 header={globalStyles.headerNewTask}
                 task_id={task.id}
+                asigned_at={task.asigned_at}
               />
             </motion.div>
           ))}
@@ -63,7 +62,7 @@ const Board = ({ tasks }) => {
         <ButtonAddNew />
         {tasks
           ?.filter((task) => task.status === "InProgress")
-          .map((task, index) => (
+          .map((task, index) => (            
             <NewsTask
               key={index}
               title={task.title}

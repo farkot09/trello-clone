@@ -16,3 +16,8 @@ export const getTaskByBoardId = async (id, token) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     return axios.get(`${VITE_API_URL}/tasks/board/${id}`)
 }
+
+export const assingTask = async (id, data, token) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    return axios.patch(`${VITE_API_URL}/tasks/${id}/assign`, data)
+}

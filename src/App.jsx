@@ -8,6 +8,7 @@ import TaskPage from "./pages/TaskPage";
 import Grid from "@mui/material/Grid2";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import useAuthStore from "./store/authStore";
+import Logout from "./components/Logout";
 
 const App = () => {
   const { isAuthenticated } = useAuthStore();
@@ -24,6 +25,7 @@ const App = () => {
               <Route path="/board" element={<BoardPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/tasks/:boardId" element={<TaskPage />} />
+              <Route path="/logout" element={<Logout />}/>
             </Routes>
           ) : (
             ""

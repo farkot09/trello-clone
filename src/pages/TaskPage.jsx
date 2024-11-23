@@ -14,7 +14,7 @@ const TaskPage = () => {
 
   useEffect(() => {    
     getTaskByBoardId(boardId, token).then((response) => {      
-      setTasks(response.data);
+      setTasks(response.data);    
     });
   }, [id, token]);
   return (
