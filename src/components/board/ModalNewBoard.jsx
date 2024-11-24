@@ -14,6 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import useAuthStore from "../../store/authStore";
 import { createBoard } from "../../services/boards";
+import useTaskStore  from "../../store/taskStore";
 
 const ModalNewBoard = ({ closepopup, open }) => {
     const [title, setTitle] = useState("")
@@ -23,6 +24,7 @@ const ModalNewBoard = ({ closepopup, open }) => {
 
     const { isAuthenticated } = useAuthStore();
     const { id, token } = isAuthenticated();
+    const { setChanges } = useTaskStore();
 
     useEffect(() => {
         setGetToken(token)        
@@ -36,6 +38,7 @@ const ModalNewBoard = ({ closepopup, open }) => {
         try {
           const res = await createBoard(newBoard, getToken);
           console.log(res);
+          setChanges(newBoard)
           
         } catch (error) {
           console.error(error);

@@ -6,6 +6,7 @@ import ButtonNewBoard from "../components/board/ButtonNewBoard";
 import { Typography } from "@mui/material";
 import { getBoardsByUserId} from "../services/boards";
 import useAuthStore from "../store/authStore";
+import useTaskStore from "../store/taskStore";
 import useBoardStore from "../store/boardStore";
 import TableBoards from "../components/board/TableBoards";
 import { useLocation } from 'react-router-dom';
@@ -15,12 +16,14 @@ const BoardPage = () => {
   const { isAuthenticated } = useAuthStore();
   const { id, token } = isAuthenticated();
   const { setBoards, boards } = useBoardStore();
+  const { changes } = useTaskStore();
 
   useEffect(() => {
     getBoardsByUserId(id, token).then((response) => {
+      console.log(response.data);  // Mostrar los boards en la consola para debuguear
       setBoards(response.data);
     });    
-  }, [id, token]);
+  }, [id, token, changes]);
 
   return (
     <Grid
@@ -32,7 +35,8 @@ const BoardPage = () => {
       }}
     >
       {/* Reder Tareas Pendientes */}
-      <Grid size={{ md: 8, xs: 12 }}>
+      <Grid size={{ md: 1, xs: 12 }}></Grid>
+      <Grid size={{ md: 10, xs: 12 }}>
         <Typography
           variant="h5"
           color="textSecondary"
@@ -44,7 +48,7 @@ const BoardPage = () => {
         <TableBoards data={boards} />
 
       </Grid>
-
+      <Grid size={{ md: 1, xs: 12 }}></Grid>
     </Grid>
   );
 };

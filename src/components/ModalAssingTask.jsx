@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { assingTask } from "../services/tasks";
 import useAuthStore from "../store/authStore";
+import useTaskStore from "../store/taskStore";
 
 const ModalAssingTask = ({ closepopup, open, dataMembers, task_id, defaultMember }) => {
   const [member, setmember] = useState(defaultMember?.id || "");
@@ -24,6 +25,7 @@ const ModalAssingTask = ({ closepopup, open, dataMembers, task_id, defaultMember
   const [alertMessage, setalertMessage] = useState("");
   const { isAuthenticated } = useAuthStore();
   const { id, token } = isAuthenticated();
+  const { setChanges } = useTaskStore();
 
   const handleChange = (event) => {
     setmember(event.target.value);
@@ -38,7 +40,8 @@ const ModalAssingTask = ({ closepopup, open, dataMembers, task_id, defaultMember
       return;
     }
     
-    const res = await assingTask(task_id, {id:task_id,asigned_at:member }, token);    
+    const res = await assingTask(task_id, {id:task_id,asigned_at:member }, token);
+    setChanges(task_id)    
     closepopup();
   }
 

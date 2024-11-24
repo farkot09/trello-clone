@@ -26,3 +26,8 @@ export const changeStatusTask = async (id, data, token) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     return axios.patch(`${VITE_API_URL}/tasks/changeStatus/${id}`, data)
 }
+
+export const getTasksAssignedByuserId = async (id, token) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    return axios.get(`${VITE_API_URL}/tasks/assigned/${id}`)
+}

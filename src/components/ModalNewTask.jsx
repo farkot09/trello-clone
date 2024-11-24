@@ -26,7 +26,7 @@ const ModalNewTask = ({ closepopup, open }) => {
 
     const { isAuthenticated } = useAuthStore();
     const { id, token } = isAuthenticated();
-    const { addTask } = useTaskStore();
+    const { addTask, setChanges } = useTaskStore();
     const { boardId } = useParams();
 
     useEffect(() => {
@@ -40,11 +40,12 @@ const ModalNewTask = ({ closepopup, open }) => {
           const res = await createTask(newTask, getToken);          
           if (res.status === 201) {
             setAeverityAlert("success");
-            setMessageAlert("Task created successfully!");
+            setMessageAlert(`Task - ${title} - was created successfully!`);
             setTitle("");
             setDescription("");
             closepopup(true);
             addTask(newTask);
+            setChanges(newTask)
           }
 
         } catch (error) {            

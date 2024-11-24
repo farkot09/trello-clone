@@ -20,7 +20,6 @@ import useBoardStore from "../store/boardStore";
 
 const Navbar = () => {
   const { isAuthenticated } = useAuthStore();
-  const { setListMembersStore, listMembersStore } = useBoardStore();
   const { name, token } = isAuthenticated();
   const [open, openchange] = useState(false);
   const [email, setEmail] = useState("");
@@ -116,12 +115,12 @@ const getUsersAssignedToBoard = async () => {
 
           {/* Navegación */}
           <Stack direction="row" spacing={2} sx={{ marginLeft: 4 }}>
-            {["Board", "Profile", "Calendar", "Progress"].map((item, index) => (
+            {["Board", "Assigned tasks", "Profile"].map((item, index) => (
               <Button
                 key={index}
                 variant={item === "Board" ? "outlined" : "text"}
                 component={Link}
-                to={`/${item.toLowerCase()}`}
+                to={`/${item.toLowerCase().replace(" ", "_")}`}
                 sx={{
                   textTransform: "none",
                   fontWeight: item === "Board" ? "bold" : "normal",

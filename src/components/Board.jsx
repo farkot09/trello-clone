@@ -10,8 +10,10 @@ import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { DndContext} from '@dnd-kit/core';
 import { changeStatusTask } from "../services/tasks";
+import useTaskStore from "../store/taskStore";
 
-const Board = ({ tasks, setTasks }) => {
+const Board = ({ tasks, setTasks, titleBoard }) => {
+  const { setChanges } = useTaskStore();
 
   const handleDragEnd = async (event) => {
     const { active, over } = event;
@@ -22,11 +24,12 @@ const Board = ({ tasks, setTasks }) => {
     const data = { id: task.id, status: task.status };    
     const res = await changeStatusTask(active.id,data, task);
     if (!res.status === 200) return console.log(res);
-    setTasks([...tasks]);    
+    setTasks([...tasks]);
+    setChanges(task)    
   }
 
   return (
-    <DndContext onDragEnd={handleDragEnd} >
+    <DndContext onDragEnd={handleDragEnd} >      
     <Grid
       container
       spacing={2}
@@ -82,14 +85,22 @@ const Board = ({ tasks, setTasks }) => {
                 {tasks
           ?.filter((task) => task.status === "InProgress")
           .map((task, index) => (            
-            <NewsTask
+            <motion.div
               key={index}
-              title={task.title}
-              comments={task.comments}
-              date={task.createdAt}
-              header={globalStyles.headerInProgress}
-              task_id={task.id}
-            />
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <NewsTask
+                key={index}
+                title={task.title}                
+                description={task.description}
+                date={task.createdAt}
+                header={globalStyles.headerNewTask}
+                task_id={task.id}
+                asigned_at={task.asigned_at}
+              />
+            </motion.div>
           ))}        
       </Box> 
       </Grid>
@@ -107,14 +118,22 @@ const Board = ({ tasks, setTasks }) => {
         {tasks
           ?.filter((task) => task.status === "Completed")
           .map((task, index) => (
-            <NewsTask
+            <motion.div
               key={index}
-              title={task.title}
-              comments={task.comments}
-              date={task.createdAt}
-              header={globalStyles.headerDone}
-              task_id={task.id}
-            />
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <NewsTask
+                key={index}
+                title={task.title}                
+                description={task.description}
+                date={task.createdAt}
+                header={globalStyles.headerNewTask}
+                task_id={task.id}
+                asigned_at={task.asigned_at}
+              />
+            </motion.div>
           ))}
       </Box> 
       </Grid>

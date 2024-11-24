@@ -56,7 +56,7 @@ boxListask:{
   backgroundColor: '#f1f1f1', // Color de fondo gris claro  
   justifyContent: 'center',
   alignItems: 'center',
-
+  marginBottom: '100px',
 }
 
   };

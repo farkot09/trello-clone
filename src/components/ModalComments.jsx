@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { getCommentsByTask, createComment } from "../services/comments";
 import useAuthStore from "../store/authStore";
+import useTaskStore from "../store/taskStore";
 import Grid from "@mui/material/Grid2";
 import { motion } from "framer-motion";
 
@@ -26,16 +27,17 @@ const ModalComments = ({ closepopup, open, task_id, task_title }) => {
   const [detectChanges, setDetectChanges] = useState(false);
   const { isAuthenticated } = useAuthStore();
   const { id, token } = isAuthenticated();
+  const { setChanges, changes } = useTaskStore();
 
   useEffect(() => {
     setGetToken(token);
     getComments(task_id);
-  }, [token, detectChanges]);
+  }, [token, changes]);
 
   const getComments = async () => {
     try {
       const res = await getCommentsByTask(task_id, getToken);
-      setComments(res.data);
+      setComments(res.data);      
     } catch (error) {
       console.error(error.response.data.message);
     }
@@ -47,10 +49,10 @@ const ModalComments = ({ closepopup, open, task_id, task_title }) => {
     try {
       const res = await createComment(addComment, getToken);
       setNewComment("");
-      setDetectChanges(!detectChanges);
+      setChanges(newComment);
     } catch (error) {
       console.error(error.response.data.message);
-      setDetectChanges(!detectChanges);
+      setChanges(error.response.data.message);
     }
   };
 

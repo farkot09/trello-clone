@@ -9,6 +9,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import { getCommentsByTask } from "../../services/comments";
 import useAuthStore from "../../store/authStore";
+import useTaskStore from "../../store/taskStore";
 import useBoardStore from "../../store/boardStore";
 import ModalAssingTask from "../ModalAssingTask";
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
@@ -23,6 +24,7 @@ const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => 
   const [open2, openchange2] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const { isAuthenticated } = useAuthStore();
+  const { changes } = useTaskStore();
   const { token } = isAuthenticated();
   const { listMembersStore } = useBoardStore();
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
@@ -64,7 +66,7 @@ const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => 
     const fechaFormateada = fecha.toLocaleDateString("es-ES", opciones);
     setformatedDate(fechaFormateada);
     getComments(task_id);    
-  }, [date]);
+  }, [date, changes]);
 
   return (
     <Box style={style}  sx={globalStyles.paperNewTask} >
@@ -101,13 +103,6 @@ const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => 
         </Box>
 
         <Box>
-          <IconButton
-            sx={{ color: "#01c875" }}
-            size="small"
-            onClick={functionopenpopup}
-          >
-            <ArrowForwardIcon fontSize="small" />
-          </IconButton>
           <IconButton
             sx={{ color: asigned_at ? "green" : "red" }}
             size="small"
