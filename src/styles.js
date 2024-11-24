@@ -20,13 +20,11 @@ const globalStyles = {
     buttonNewTask:{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        padding: "16px",
-        borderRadius: "8px",
+        alignItems: "center",  
+        borderRadius: '10px', // Bordes redondeados para un diseño más suave
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
         backgroundColor: "#fff",
-        maxWidth: "300px",
-        height: "10px", 
+        maxWidth: "300px",        
         margin: "auto", 
         marginBottom:"10px"
     },
@@ -50,6 +48,15 @@ const globalStyles = {
     backgroundColor: "#42b9a8",
     borderRadius: "2px",
     marginBottom: "12px",      
+},
+boxListask:{
+  border: '2px solid #e158a0', // Borde continuo de color azul
+  padding: '16px',
+  borderRadius: '10px', // Bordes redondeados para un diseño más suave
+  backgroundColor: '#f1f1f1', // Color de fondo gris claro  
+  justifyContent: 'center',
+  alignItems: 'center',
+
 }
 
   };

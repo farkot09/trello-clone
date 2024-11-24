@@ -12,6 +12,8 @@ import useAuthStore from "../../store/authStore";
 import useBoardStore from "../../store/boardStore";
 import ModalAssingTask from "../ModalAssingTask";
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import {useDraggable} from '@dnd-kit/core';
+import {CSS} from '@dnd-kit/utilities'
 
 // eslint-disable-next-line react/prop-types
 const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => {
@@ -23,6 +25,12 @@ const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => 
   const { isAuthenticated } = useAuthStore();
   const { token } = isAuthenticated();
   const { listMembersStore } = useBoardStore();
+  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    id: task_id,
+  });
+  const style = {
+    transform: CSS.Transform.toString(transform),
+  };
  
   const functionopenpopup = () => {
     openchange(true);
@@ -59,9 +67,9 @@ const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => 
   }, [date]);
 
   return (
-    <Box sx={globalStyles.paperNewTask}>
+    <Box style={style}  sx={globalStyles.paperNewTask} >
+      <Box ref={setNodeRef} {...listeners} {...attributes} component={"div"}>
       <Box sx={header}></Box>
-
       <Typography variant="h6" color="#6161ff" sx={{ marginBottom: "8px" }}>
         {title}
       </Typography>
@@ -72,7 +80,7 @@ const NewsTask = ({ task_id, title, date, header, description, asigned_at }) => 
       >
         {description}
       </Typography>
-
+      </Box>
       <Box
         sx={{
           display: "flex",

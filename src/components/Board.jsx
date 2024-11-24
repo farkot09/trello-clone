@@ -6,11 +6,27 @@ import Grid from "@mui/material/Grid2";
 import NewsTask from "../components/task/NewsTask";
 import ButtonAddNew from "../components/task/ButtonAddNew";
 import globalStyles from "../styles";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import { DndContext} from '@dnd-kit/core';
+import { changeStatusTask } from "../services/tasks";
 
-const Board = ({ tasks }) => {
+const Board = ({ tasks, setTasks }) => {
+
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+    if (!active ||!over) return;
+    const task = tasks.find((t) => t.id === active.id);
+    if (!task) return;
+    task.status = over.id;
+    const data = { id: task.id, status: task.status };    
+    const res = await changeStatusTask(active.id,data, task);
+    if (!res.status === 200) return console.log(res);
+    setTasks([...tasks]);    
+  }
+
   return (
+    <DndContext onDragEnd={handleDragEnd} >
     <Grid
       container
       spacing={2}
@@ -28,7 +44,8 @@ const Board = ({ tasks }) => {
         >
           News Task
         </Typography>
-        <ButtonAddNew />
+        <ButtonAddNew id={"Pending"} color={"2px solid #c1c928"} />
+        <Box sx={{...globalStyles.boxListask, border:'2px solid #c1c928'}}>        
         {tasks
           ?.filter((task) => task.status === "Pending")
           .map((task, index) => (
@@ -49,6 +66,7 @@ const Board = ({ tasks }) => {
               />
             </motion.div>
           ))}
+          </Box>
       </Grid>
       {/* Reder Tareas En Progreso */}
       <Grid size={{ md: 3, xs: 12 }}>
@@ -59,8 +77,9 @@ const Board = ({ tasks }) => {
         >
           In Progress
         </Typography>
-        <ButtonAddNew />
-        {tasks
+          <ButtonAddNew id={"InProgress"} color={"2px solid #007bff"} />
+          <Box sx={{...globalStyles.boxListask, border:'2px solid #007bff'}} > 
+                {tasks
           ?.filter((task) => task.status === "InProgress")
           .map((task, index) => (            
             <NewsTask
@@ -71,7 +90,8 @@ const Board = ({ tasks }) => {
               header={globalStyles.headerInProgress}
               task_id={task.id}
             />
-          ))}
+          ))}        
+      </Box> 
       </Grid>
       {/* Reder Tareas Terminadas */}
       <Grid size={{ md: 3, xs: 12 }}>
@@ -82,9 +102,10 @@ const Board = ({ tasks }) => {
         >
           Done
         </Typography>
-        <ButtonAddNew />
+        <ButtonAddNew id={"Completed"} color={"2px solid #e158a0"}  />
+        <Box sx={{...globalStyles.boxListask, border:'2px solid #e158a0'}} > 
         {tasks
-          ?.filter((task) => task.status === "Done")
+          ?.filter((task) => task.status === "Completed")
           .map((task, index) => (
             <NewsTask
               key={index}
@@ -95,8 +116,10 @@ const Board = ({ tasks }) => {
               task_id={task.id}
             />
           ))}
+      </Box> 
       </Grid>
     </Grid>
+    </DndContext>
   );
 };
 

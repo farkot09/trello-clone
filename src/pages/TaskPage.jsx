@@ -19,7 +19,7 @@ const TaskPage = () => {
   }, [id, token]);
   return (
     <div>
-      <Board tasks={tasks} />
+      <Board tasks={tasks} setTasks={setTasks} />
     </div>
   )
 }
