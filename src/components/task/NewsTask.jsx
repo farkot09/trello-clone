@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import { Avatar, Box, IconButton } from "@mui/material";
 import globalStyles from "../../styles";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ModalComments from "../modalComments";
+import ModalComments from "../ModalComments";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import { getCommentsByTask } from "../../services/comments";
