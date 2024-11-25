@@ -9,7 +9,6 @@ import useAuthStore from "../store/authStore";
 import useTaskStore from "../store/taskStore";
 import useBoardStore from "../store/boardStore";
 import TableBoards from "../components/board/TableBoards";
-import { useLocation } from 'react-router-dom';
 
 
 const BoardPage = () => {
@@ -20,7 +19,6 @@ const BoardPage = () => {
 
   useEffect(() => {
     getBoardsByUserId(id, token).then((response) => {
-      console.log(response.data);  // Mostrar los boards en la consola para debuguear
       setBoards(response.data);
     });    
   }, [id, token, changes]);

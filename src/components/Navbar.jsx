@@ -14,9 +14,9 @@ import { getUserByEmail, getUserById } from "../services/users";
 import ModalAssingUser from "./ModalAssingUser";
 import { assingUserToBoard, getBoardById } from "../services/boards";
 import { useLocation } from "react-router-dom";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import useBoardStore from "../store/boardStore";
-
+import useTaskStore from "../store/taskStore";
 
 const Navbar = () => {
   const { isAuthenticated } = useAuthStore();
@@ -29,16 +29,21 @@ const Navbar = () => {
   const location = useLocation();
   const match = location.pathname.match(/\/tasks\/(\d+)/);
   const boardId = match ? match[1] : null;
+  const { setChanges, changes } = useTaskStore();
 
   const handleAsssingUser = async () => {
     try {
-      const res = await getUserByEmail(email, token);      
-      if(res.data === '') {
+      const res = await getUserByEmail(email, token);
+      if (res.data === "") {
         setSeverityAlert("error");
         setMessageAlert("Email not found.");
         return;
       }
-      await assingUserToBoard(boardId, {usersAssignedIds:[res.data.id]}, token);
+      await assingUserToBoard(
+        boardId,
+        { usersAssignedIds: [res.data.id] },
+        token
+      );
       //reload page
       window.location.reload();
       openchange(false);
@@ -52,37 +57,37 @@ const Navbar = () => {
     openchange(false);
   };
 
-const getUsersAssignedToBoard = async () => {
-  const { setListMembersStore } = useBoardStore.getState();
+  const getUsersAssignedToBoard = async () => {
+    const { setListMembersStore } = useBoardStore.getState();
 
-  setListMembers([]); // Resetea la lista local
-  try {
-    const boardRes = await getBoardById(boardId, token);
-    await Promise.all(
-      boardRes.data.usersAssignedIds.map(async (item) => {
-        const userRes = await getUserById(item, token);
+    setListMembers([]); // Resetea la lista local
+    try {
+      if (!boardId) return;
+      const boardRes = await getBoardById(boardId, token);
+      await Promise.all(
+        boardRes.data.usersAssignedIds.map(async (item) => {
+          const userRes = await getUserById(item, token);
+          setChanges(boardId);
+          // Actualiza la lista local
+          setListMembers((prev) => {
+            const exists = prev.some((member) => member.id === userRes.data.id);
+            const updatedList = exists ? prev : [...prev, userRes.data];
 
-        // Actualiza la lista local
-        setListMembers((prev) => {
-          const exists = prev.some((member) => member.id === userRes.data.id);
-          const updatedList = exists ? prev : [...prev, userRes.data];
+            // También actualiza la lista en Zustand
+            updatedList.forEach((member) => setListMembersStore(member));
 
-          // También actualiza la lista en Zustand
-          updatedList.forEach((member) => setListMembersStore(member));
-
-          return updatedList;
-        });
-      })
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+            return updatedList;
+          });
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getUsersAssignedToBoard();
-  }, []);
+  }, [changes]);
 
   return (
     <AppBar
@@ -140,9 +145,15 @@ const getUsersAssignedToBoard = async () => {
           <Stack direction="row" spacing={-1} sx={{ marginRight: 2 }}>
             {listMembers.map((item, index) => (
               <Tooltip key={index} title={item.name}>
-              <Avatar  sx={{ bgcolor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}>
-                {item.name.charAt(0).toUpperCase()}
-              </Avatar>
+                <Avatar
+                  sx={{
+                    bgcolor: `#${Math.floor(Math.random() * 16777215).toString(
+                      16
+                    )}`,
+                  }}
+                >
+                  {item.name.charAt(0).toUpperCase()}
+                </Avatar>
               </Tooltip>
             ))}
             <IconButton
@@ -177,10 +188,13 @@ const getUsersAssignedToBoard = async () => {
           <Avatar sx={{ bgcolor: deepOrange[500] }}>
             {name.charAt(0).toUpperCase()}
           </Avatar>
-          <IconButton sx={{ marginRight: 1 }} onClick={() => {
-            window.location.href = "/logout";
-          }}>
-          <LogoutIcon sx={{ marginRight: 1, color: "red" }} />
+          <IconButton
+            sx={{ marginRight: 1 }}
+            onClick={() => {
+              window.location.href = "/logout";
+            }}
+          >
+            <LogoutIcon sx={{ marginRight: 1, color: "red" }} />
           </IconButton>
         </Box>
       </Toolbar>

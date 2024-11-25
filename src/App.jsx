@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
-import Board from "./components/Board";
 import LoginPage from "./pages/LoginPage";
 import BoardPage from "./pages/Boardpage";
 import TaskPage from "./pages/TaskPage";
@@ -12,8 +11,16 @@ import Logout from "./components/Logout";
 import AssignedTasks from "./pages/AssignedTasks";
 
 const App = () => {
-  const { isAuthenticated } = useAuthStore();
-  const { isAuth } = isAuthenticated();
+  const { isAuthenticated, setToken } = useAuthStore();
+  const { isAuth, token } = isAuthenticated();
+  const tokenLocal = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (tokenLocal && !isAuth) {
+      setToken(tokenLocal);
+    }
+  }, [tokenLocal, isAuth]);
+  
 
   return (
     <Router>

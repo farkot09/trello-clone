@@ -95,8 +95,8 @@ export default function TableBoards({ data }) {
                 {Array.isArray(board.taskIds) ? board.taskIds.length : 0}
                 <LinearProgress
                   color="success"
-                  variant="buffer"
-                  value={board.taskIds?.length * 10 || 0}
+                  variant="determinate"
+                  value={(board.taskIds?.length || 0) * 10}
                 />
               </TableCell>
               <TableCell align="right">
