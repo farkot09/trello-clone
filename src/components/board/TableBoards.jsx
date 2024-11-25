@@ -96,7 +96,7 @@ export default function TableBoards({ data }) {
                 <LinearProgress
                   color="success"
                   variant="determinate"
-                  value={(board.taskIds?.length || 0) * 10}
+                  value={(board.taskIds?.length || 0)}
                 />
               </TableCell>
               <TableCell align="right">

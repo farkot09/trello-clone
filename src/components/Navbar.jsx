@@ -30,7 +30,8 @@ const Navbar = () => {
   const match = location.pathname.match(/\/tasks\/(\d+)/);
   const boardId = match ? match[1] : null;
   const { setChanges, changes } = useTaskStore();
-
+  const linkLocation = location.pathname
+  
   const handleAsssingUser = async () => {
     try {
       const res = await getUserByEmail(email, token);
@@ -123,14 +124,14 @@ const Navbar = () => {
             {["Board", "Assigned tasks", "Profile"].map((item, index) => (
               <Button
                 key={index}
-                variant={item === "Board" ? "outlined" : "text"}
+                variant={`/${item.toLowerCase().replace(" ", "_")}` === linkLocation ? "outlined" : "text"}
                 component={Link}
                 to={`/${item.toLowerCase().replace(" ", "_")}`}
                 sx={{
                   textTransform: "none",
-                  fontWeight: item === "Board" ? "bold" : "normal",
-                  color: item === "Board" ? "#1976d2" : "black",
-                  borderColor: item === "Board" ? "#1976d2" : "transparent",
+                  fontWeight: `/${item.toLowerCase().replace(" ", "_")}` === linkLocation ? "bold" : "normal",
+                  color: `/${item.toLowerCase().replace(" ", "_")}` === linkLocation ? "#1976d2" : "black",
+                  borderColor: `/${item.toLowerCase().replace(" ", "_")}` === linkLocation ? "#1976d2" : "transparent",
                 }}
               >
                 {item}

@@ -11,7 +11,7 @@ const AssignedTasks = () => {
 
   useEffect(() => {
     getTasksAssignedByuserId(id, token).then((response) => {
-      setTasks(response.data); // Mostrar las tareas en la consola para debuguear
+      setTasks(response.data);
     });
   }, []);
 
@@ -29,7 +29,7 @@ const AssignedTasks = () => {
       <Grid size={{ md: 10, xs: 12 }}>
         {tasks.map((task) => (
           <Grid key={task.id} size={{ md: 10, xs: 12 }}>
-            <TaskCard title={task.title} status={task.status} />
+            <TaskCard title={task.title} status={task.status} board={task.id_board} />
           </Grid>
         ))}
       </Grid>

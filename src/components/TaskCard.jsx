@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, Typography, Chip } from "@mui/material";
 
-export default function TaskCard({ title, status }) {
+export default function TaskCard({ title, status, board }) {
   // Determinar el color del chip según el estado
   const getStatusColor = (status) => {
     switch (status) {
@@ -16,6 +16,10 @@ export default function TaskCard({ title, status }) {
     }
   };
 
+  const handleClick = () => {
+    window.open(`/tasks/${board.id}`, "_blank");
+  };
+
   return (
     <Card
       sx={{
@@ -25,6 +29,7 @@ export default function TaskCard({ title, status }) {
         borderRadius: "8px",
         backgroundColor: "#f9f9f9",
       }}
+      onClick={handleClick}
     >
       <CardContent>
         <Typography variant="h6" component="div" noWrap>
@@ -36,6 +41,9 @@ export default function TaskCard({ title, status }) {
           size="small"
           sx={{ marginTop: "10px" }}
         />
+        <Typography variant="body2" color="textSecondary" marginTop={1}>
+          Board: {board.title}
+        </Typography>
       </CardContent>
     </Card>
   );
